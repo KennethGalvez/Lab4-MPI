@@ -26,7 +26,7 @@ void Vector_sum(double x[], double y[], double z[], int n);
 
 /*---------------------------------------------------------------------*/
 int main(void) {
-    int n = 100000000; // Número de elementos en los vectores
+    int n = 100000;  // Número de elementos en los vectores
     double *x, *y, *z;
     clock_t start, end;  // <-- Step 1: Declare the clock_t variables
     double elapsed_time;
@@ -52,7 +52,6 @@ int main(void) {
 
     elapsed_time = (double)(end - start) / CLOCKS_PER_SEC;
     printf("Time to compute vector sum: %f seconds\n", elapsed_time);
-    
     free(x);
     free(y);
     free(z);
