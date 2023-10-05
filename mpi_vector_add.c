@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include <time.h>
 
 void Check_for_error(int local_ok, char fname[], char message[], 
       MPI_Comm comm);
@@ -46,29 +47,46 @@ int main(void) {
    double *local_x, *local_y, *local_z;
    MPI_Comm comm;
 
+   // Inicializa MPI
    MPI_Init(NULL, NULL);
    comm = MPI_COMM_WORLD;
    MPI_Comm_size(comm, &comm_sz);
    MPI_Comm_rank(comm, &my_rank);
 
+   // Leer el tamaño de los vectores (n)
    Read_n(&n, &local_n, my_rank, comm_sz, comm);
-#  ifdef DEBUG
-   printf("Proc %d > n = %d, local_n = %d\n", my_rank, n, local_n);
-#  endif
-   Allocate_vectors(&local_x, &local_y, &local_z, local_n, comm);
-   
-   Read_vector(local_x, local_n, n, "x", my_rank, comm);
-   Print_vector(local_x, local_n, n, "x is", my_rank, comm);
-   Read_vector(local_y, local_n, n, "y", my_rank, comm);
-   Print_vector(local_y, local_n, n, "y is", my_rank, comm);
-   
-   Parallel_vector_sum(local_x, local_y, local_z, local_n);
-   Print_vector(local_z, local_n, n, "The sum is", my_rank, comm);
 
+   // Añade esta sección para generar vectores aleatorios
+   srand(time(NULL));
+   local_x = (double*)malloc(local_n * sizeof(double));
+   local_y = (double*)malloc(local_n * sizeof(double));
+   local_z = (double*)malloc(local_n * sizeof(double));
+
+   for (int i = 0; i < local_n; i++) {
+       local_x[i] = (double)rand() / RAND_MAX;
+       local_y[i] = (double)rand() / RAND_MAX;
+   }
+
+   // Imprimir los primeros y últimos 10 elementos de los vectores
+   Print_vector(local_x, 10, n, "First 10 elements of x", my_rank, comm);
+   Print_vector(local_y, 10, n, "First 10 elements of y", my_rank, comm);
+
+   Print_vector(local_x + local_n - 10, 10, n, "Last 10 elements of x", my_rank, comm);
+   Print_vector(local_y + local_n - 10, 10, n, "Last 10 elements of y", my_rank, comm);
+
+   // Realiza la suma paralela
+   Parallel_vector_sum(local_x, local_y, local_z, local_n);
+
+   // Imprimir los primeros y últimos 10 elementos del resultado
+   Print_vector(local_z, 10, n, "First 10 elements of the sum", my_rank, comm);
+   Print_vector(local_z + local_n - 10, 10, n, "Last 10 elements of the sum", my_rank, comm);
+
+   // Liberar memoria
    free(local_x);
    free(local_y);
    free(local_z);
 
+   // Finaliza MPI
    MPI_Finalize();
 
    return 0;
