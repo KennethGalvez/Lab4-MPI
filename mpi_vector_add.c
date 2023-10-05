@@ -70,11 +70,11 @@ int main(void) {
    }
 
    // Imprimir los primeros y últimos 10 elementos de los vectores
-   Print_vector(local_x, 10, n, "First 10 elements of x", my_rank, comm);
-   Print_vector(local_y, 10, n, "First 10 elements of y", my_rank, comm);
+   // Print_vector(local_x, 10, n, "First 10 elements of x", my_rank, comm);
+   // Print_vector(local_y, 10, n, "First 10 elements of y", my_rank, comm);
 
-   Print_vector(local_x + local_n - 10, 10, n, "Last 10 elements of x", my_rank, comm);
-   Print_vector(local_y + local_n - 10, 10, n, "Last 10 elements of y", my_rank, comm);
+   // Print_vector(local_x + local_n - 10, 10, n, "Last 10 elements of x", my_rank, comm);
+   // Print_vector(local_y + local_n - 10, 10, n, "Last 10 elements of y", my_rank, comm);
 
    start = MPI_Wtime();
 
@@ -83,8 +83,8 @@ int main(void) {
    finish = MPI_Wtime();
 
    // Imprimir los primeros y últimos 10 elementos del resultado
-   Print_vector(local_z, 10, n, "First 10 elements of the sum", my_rank, comm);
-   Print_vector(local_z + local_n - 10, 10, n, "Last 10 elements of the sum", my_rank, comm);
+   // Print_vector(local_z, 10, n, "First 10 elements of the sum", my_rank, comm);
+   // Print_vector(local_z + local_n - 10, 10, n, "Last 10 elements of the sum", my_rank, comm);
 
    elapsed = finish - start;
    

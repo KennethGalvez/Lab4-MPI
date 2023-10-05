@@ -39,7 +39,6 @@ void Print_vector(double local_b[], int local_n, int n, char title[],
       int my_rank, MPI_Comm comm);
 double Parallel_vector_dot_product(double local_x[], double local_y[], int local_n);
 
-
 /*-------------------------------------------------------------------*/
 int main(void) {
    int n, local_n;
@@ -80,8 +79,7 @@ int main(void) {
 
    // Realiza la suma paralela
    double local_dot_product, global_dot_product;
-   double local_dot_product = Parallel_vector_dot_product(local_x, local_y, local_n);
-   double global_dot_product;
+   local_dot_product = Parallel_vector_dot_product(local_x, local_y, local_n);
    
    MPI_Reduce(&local_dot_product, &global_dot_product, 1, MPI_DOUBLE, MPI_SUM, 0, comm);
 
@@ -339,14 +337,12 @@ void Parallel_vector_sum(
 }  /* Parallel_vector_sum */
 
 
-void Parallel_vector_dot_product(
-      double  local_x[]          /* in  */, 
-      double  local_y[]          /* in  */, 
-      double* local_dot_product  /* out */, 
-      int     local_n            /* in  */) {
+double Parallel_vector_dot_product(double local_x[], double local_y[], int local_n) {
    int local_i;
-   *local_dot_product = 0.0;
+   double local_dot = 0.0;
 
    for (local_i = 0; local_i < local_n; local_i++)
-      *local_dot_product += local_x[local_i] * local_y[local_i];
-}  /* Parallel_vector_dot_product */
+      local_dot += local_x[local_i] * local_y[local_i];
+
+   return local_dot;
+}
