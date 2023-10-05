@@ -28,6 +28,8 @@ void Vector_sum(double x[], double y[], double z[], int n);
 int main(void) {
     int n = 100000;  // Número de elementos en los vectores
     double *x, *y, *z;
+    clock_t start, end;  // <-- Step 1: Declare the clock_t variables
+    double elapsed_time;
 
     Allocate_vectors(&x, &y, &z, n);
 
@@ -39,13 +41,18 @@ int main(void) {
     Print_vector(y, 10, "First 10 elements of y");
     Print_vector(x + n - 10, 10, "Last 10 elements of x");
     Print_vector(y + n - 10, 10, "Last 10 elements of y");
+    start = clock();  // <-- Step 2: Record starting time
 
     Vector_sum(x, y, z, n);
+    end = clock();  // <-- Step 3: Record ending time
 
     // Imprimir los primeros y últimos 10 elementos de z
     Print_vector(z, 10, "First 10 elements of the sum");
     Print_vector(z + n - 10, 10, "Last 10 elements of the sum");
 
+    elapsed_time = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Time to compute vector sum: %f seconds\n", elapsed_time);
+    
     free(x);
     free(y);
     free(z);

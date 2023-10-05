@@ -46,6 +46,8 @@ int main(void) {
    int comm_sz, my_rank;
    double *local_x, *local_y, *local_z;
    MPI_Comm comm;
+   double start, finish, elapsed;
+
 
    // Inicializa MPI
    MPI_Init(NULL, NULL);
@@ -74,13 +76,22 @@ int main(void) {
    Print_vector(local_x + local_n - 10, 10, n, "Last 10 elements of x", my_rank, comm);
    Print_vector(local_y + local_n - 10, 10, n, "Last 10 elements of y", my_rank, comm);
 
+   start = MPI_Wtime();
+
    // Realiza la suma paralela
    Parallel_vector_sum(local_x, local_y, local_z, local_n);
+   finish = MPI_Wtime();
 
    // Imprimir los primeros y últimos 10 elementos del resultado
    Print_vector(local_z, 10, n, "First 10 elements of the sum", my_rank, comm);
    Print_vector(local_z + local_n - 10, 10, n, "Last 10 elements of the sum", my_rank, comm);
 
+   elapsed = finish - start;
+   
+   // Print the elapsed time
+   if (my_rank == 0) { // Ensure only one process prints the time
+      printf("Parallel vector summation took %f seconds\n", elapsed);
+   }
    // Liberar memoria
    free(local_x);
    free(local_y);
