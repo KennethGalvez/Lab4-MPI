@@ -335,3 +335,16 @@ void Parallel_vector_sum(
    for (local_i = 0; local_i < local_n; local_i++)
       local_z[local_i] = local_x[local_i] + local_y[local_i];
 }  /* Parallel_vector_sum */
+
+
+void Parallel_vector_dot_product(
+      double  local_x[]          /* in  */, 
+      double  local_y[]          /* in  */, 
+      double* local_dot_product  /* out */, 
+      int     local_n            /* in  */) {
+   int local_i;
+   *local_dot_product = 0.0;
+
+   for (local_i = 0; local_i < local_n; local_i++)
+      *local_dot_product += local_x[local_i] * local_y[local_i];
+}  /* Parallel_vector_dot_product */
